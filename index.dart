@@ -43,15 +43,18 @@ bool checkCombination(String combination, String checkFor) {
   return match;
 }
 
-void checkWinner(player) {
+bool checkWinner(player) {
   for (final item in combinations) {
     bool combinationValidity = checkCombination(item, player);
     if (combinationValidity == true) {
       print('$player WON!');
       winner = true;
       break;
+    } else {
+      winner = false;
     }
   }
+  return winner;
 }
 
 //get input, check winners
@@ -62,6 +65,13 @@ void getnextCharacter() {
   //read the input as a string, and wait for the user to input sth.
   //Then convert the input from string to integer using int.parse()
   int number = int.parse(stdin.readLineSync()!);
+
+//Validate user inputs to ensure they are within the valid range (1-9)
+  while (number > 9 || number < 1) {
+    print("Make sure to enter a number between 1 and 9");
+    print('Choose Number for ${isXturn == true ? "X" : "O"}');
+    number = int.parse(stdin.readLineSync()!);
+  }
 
   //change the value of selected number(isXturn) true->X, else->O
   //[number-1] because indexing start from 0
@@ -74,7 +84,12 @@ void getnextCharacter() {
   movementCount++;
   if (movementCount == 9) {
     winner = true;
-    print('DOONE!');
+    print('DONE!');
+    checkWinner('X');
+    checkWinner('O');
+    if (!winner) {
+      print('No winner!');
+    }
   } else {
     //clear the console
     clearScreen();
